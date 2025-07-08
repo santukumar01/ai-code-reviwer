@@ -15,7 +15,7 @@ function App() {
   const [aiResponse, setAiResponse] = useState("");
 
   const [code, setCode] = useState(`function sum() {
-  return 1 + 1;
+  return a + b;
 }`);
 
   useEffect(() => {
