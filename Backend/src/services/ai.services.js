@@ -1,12 +1,14 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
+// Load environment variables only in development
 if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
+  const dotenv = await import("dotenv");
+  dotenv.config();
 }
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
 
-async function main(prompt) {
+export default async function main(prompt) {
   try {
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash",
@@ -47,12 +49,11 @@ async function main(prompt) {
 
         ❌ Bad Code:
         \`\`\`javascript
-                        function fetchData() {
-            let data = fetch('/api/data').then(response => response.json());
-            return data;
+        function fetchData() {
+          let data = fetch('/api/data').then(response => response.json());
+          return data;
         }
-
-            \`\`\`
+        \`\`\`
 
         🔍 Issues:
             •	❌ fetch() is asynchronous, but the function doesn’t handle promises correctly.
@@ -60,18 +61,18 @@ async function main(prompt) {
 
         ✅ Recommended Fix:
 
-                \`\`\`javascript
+        \`\`\`javascript
         async function fetchData() {
-            try {
-                const response = await fetch('/api/data');
-                if (!response.ok) throw new Error("HTTP error! Status: $\{response.status}");
-                return await response.json();
-            } catch (error) {
-                console.error("Failed to fetch data:", error);
-                return null;
-            }
+          try {
+            const response = await fetch('/api/data');
+            if (!response.ok) throw new Error("HTTP error! Status: $\{response.status}");
+            return await response.json();
+          } catch (error) {
+            console.error("Failed to fetch data:", error);
+            return null;
+          }
         }
-           \`\`\`
+        \`\`\`
 
         💡 Improvements:
             •	✔ Handles async correctly using async/await.
@@ -82,7 +83,8 @@ async function main(prompt) {
 
         Your mission is to ensure every piece of code follows high standards. Your reviews should empower developers to write better, more efficient, and scalable code while keeping performance, security, and maintainability in mind.
 
-        Would you like any adjustments based on your specific needs? 🚀 `,
+        Would you like any adjustments based on your specific needs? 🚀
+      `,
     });
 
     const result = await model.generateContent(prompt);
@@ -93,5 +95,3 @@ async function main(prompt) {
     return "AI request failed.";
   }
 }
-
-module.exports = main;
