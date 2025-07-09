@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import app from "./src/app.js";
+const app = require("./src/app");
 
 // For __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url);
