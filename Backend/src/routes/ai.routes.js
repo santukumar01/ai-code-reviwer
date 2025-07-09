@@ -1,8 +1,16 @@
-import express from "express";
-import { getResponse } from "../controllers/ai.controllers.js"; // .js required in ES Modules
+const aiServices = require("../services/ai.services");
 
-const router = express.Router();
+module.exports.getResponse = async (req, res) => {
+  const prompt = req.body.prompt;
+  if (!prompt) {
+    return res.status(400).send("Prompt is required");
+  }
 
-router.post("/get-response", getResponse);
-
-export default router;
+  try {
+    const response = await aiServices(prompt);
+    res.send(response);
+  } catch (error) {
+    console.error("AI Error:", error.message);
+    res.status(500).send("Failed to get AI response.");
+  }
+};
