@@ -1,6 +1,6 @@
 require("dotenv").config(); // Load env variables
 
-const app = require("./src/app.js");
+const app = require("./Backend/src/app.js");
 
 const PORT = process.env.PORT || 3000;
 
