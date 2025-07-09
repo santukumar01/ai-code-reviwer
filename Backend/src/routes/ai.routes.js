@@ -1,8 +1,8 @@
-const express = require("express");
-const aiController = require("../controllers/ai.controllers");
+import express from "express";
+import { getResponse } from "../controllers/ai.controllers.js"; // .js required in ES Modules
 
 const router = express.Router();
 
-router.post("/get-response", aiController.getResponse);
+router.post("/get-response", getResponse);
 
-module.exports = router;
+export default router;
