@@ -1,16 +1,8 @@
-const aiServices = require("../services/ai.services");
+const express = require("express");
+const aiController = require("../controllers/ai.controllers");
 
-module.exports.getResponse = async (req, res) => {
-  const prompt = req.body.prompt;
-  if (!prompt) {
-    return res.status(400).send("Prompt is required");
-  }
+const router = express.Router();
 
-  try {
-    const response = await aiServices(prompt);
-    res.send(response);
-  } catch (error) {
-    console.error("AI Error:", error.message);
-    res.status(500).send("Failed to get AI response.");
-  }
-};
+router.post("/get-response", aiController.getResponse);
+
+module.exports = router;

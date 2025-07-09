@@ -4,8 +4,7 @@
   "description": "A program to give suggestion to coders by using Google Gemini ",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "build": "cd ../Frontend && npm install && npm run build"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
