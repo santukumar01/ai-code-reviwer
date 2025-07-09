@@ -6,10 +6,6 @@ const app = express();
 
 app.use(cors());
 
-// test route
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
 app.use(express.json());
 app.use("/ai", aiRoutes);
 
