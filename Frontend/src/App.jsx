@@ -13,6 +13,7 @@ import "./App.css";
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [aiResponse, setAiResponse] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const [code, setCode] = useState(`function sum() {
   return a + b;
@@ -36,7 +37,6 @@ function App() {
 
       console.log("Response from server:", response.data);
 
-      // Try handling multiple formats
       setAiResponse(
         response.data.reply ||
           response.data.response ||
@@ -52,6 +52,24 @@ function App() {
       setIsLoading(false);
     }
   }
+
+  const copyToClipboard = () => {
+    if (!aiResponse) return;
+    navigator.clipboard.writeText(aiResponse);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const downloadReview = () => {
+    if (!aiResponse) return;
+    const blob = new Blob([aiResponse], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "review.txt";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <>
@@ -81,6 +99,51 @@ function App() {
         </div>
 
         <div className="right">
+          {aiResponse && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "10px",
+                gap: "10px",
+              }}
+            >
+              <h3 style={{ margin: 0 }}>💬 Review</h3>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button
+                  onClick={copyToClipboard}
+                  style={{
+                    padding: "5px 10px",
+                    fontSize: "0.9rem",
+                    backgroundColor: copied ? "green" : "#333",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
+                >
+                  {copied ? "✅ Copied!" : "📋 Copy Review"}
+                </button>
+
+                <button
+                  onClick={downloadReview}
+                  style={{
+                    padding: "5px 10px",
+                    fontSize: "0.9rem",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
+                >
+                  📥 Download
+                </button>
+              </div>
+            </div>
+          )}
+
           {isLoading ? (
             <p style={{ color: "#aaa", fontStyle: "italic" }}>
               ⏳ Reviewing Your code...
