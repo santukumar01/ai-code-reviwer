@@ -1,4 +1,5 @@
-require("dotenv").config(); // Load env variables
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = require("./src/app.js");
 
