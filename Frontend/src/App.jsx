@@ -29,12 +29,9 @@ function App() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/ai/get-response",
-        {
-          prompt: code,
-        }
+        "/ai/get-response", // ✅ relative path, works on Render + local
+        { prompt: code }
       );
-
       console.log("Response from server:", response.data);
 
       setAiResponse(
