@@ -4,7 +4,6 @@
 One-line summary: An AI-powered tool that provides code suggestions and improvements using Google Gemini.
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/USERNAME/REPO/blob/main/LICENSE)
-[![Stars](https://img.shields.io/github/stars/USERNAME/REPO?style=social)](https://github.com/USERNAME/REPO)
 [![Open Issues](https://img.shields.io/github/issues/USERNAME/REPO)](https://github.com/USERNAME/REPO/issues)
 
 ## Why This Project?
@@ -129,18 +128,6 @@ We welcome contributions to the AI Code Reviewer project! To contribute:
 4.  Submit a pull request with a clear description of your changes.
 
 Please follow the existing code style and conventions.
-
-## 🧪 Testing
-
-Testing information will be added here.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 💬 Feedback
-
-For questions, bug reports, or feature requests, please open an issue on the [GitHub repository](https://github.com/USERNAME/REPO/issues).
 
 ## 🌟 Show Your Support
 
