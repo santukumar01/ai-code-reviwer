@@ -15,9 +15,7 @@ function App() {
   const [aiResponse, setAiResponse] = useState("");
   const [copied, setCopied] = useState(false);
 
-  const [code, setCode] = useState(`function sum() {
-  return a + b;
-}`);
+  const [code, setCode] = useState(`//Write Your Code Here`);
 
   useEffect(() => {
     prism.highlightAll();
