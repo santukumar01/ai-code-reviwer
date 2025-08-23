@@ -14,8 +14,9 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [aiResponse, setAiResponse] = useState("");
   const [copied, setCopied] = useState(false);
-
-  const [code, setCode] = useState(`//Write Your Code Here`);
+  const [code, setCode] = useState(`// Write Your Code Here`);
+  const [language, setLanguage] = useState("javascript");
+  const [darkMode, setDarkMode] = useState(true);
 
   useEffect(() => {
     prism.highlightAll();
@@ -26,12 +27,7 @@ function App() {
     setAiResponse("");
 
     try {
-      const response = await axios.post(
-        "/ai/get-response", // ✅ relative path, works on Render + local
-        { prompt: code }
-      );
-      console.log("Response from server:", response.data);
-
+      const response = await axios.post("/ai/get-response", { prompt: code });
       setAiResponse(
         response.data.reply ||
           response.data.response ||
@@ -39,7 +35,6 @@ function App() {
           "⚠️ No response received."
       );
     } catch (error) {
-      console.error("Axios Error:", error);
       setAiResponse(
         "⚠️ Error: " + (error.response?.data || "Something went wrong.")
       );
@@ -67,88 +62,68 @@ function App() {
   };
 
   return (
-    <>
-      <main>
-        <div className="left">
-          <div className="code">
+    <div className={`app ${darkMode ? "dark" : "light"}`}>
+      {/* 🔹 Header */}
+      <header className="header">
+        <h1>⚡ AI Code Reviewer</h1>
+        <button className="toggle" onClick={() => setDarkMode(!darkMode)}>
+          {darkMode ? "🌙 Dark" : "☀️ Light"}
+        </button>
+      </header>
+
+      {/* 🔹 Main Layout */}
+      <main className="workspace">
+        {/* Left: Code Editor */}
+        <section className="left-panel">
+          <div className="editor-container">
             <Editor
               value={code}
-              onValueChange={(code) => setCode(code)}
+              onValueChange={setCode}
               highlight={(code) =>
-                prism.highlight(code, prism.languages.javascript, "javascript")
+                prism.highlight(code, prism.languages[language], language)
               }
-              padding={10}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 16,
-                border: "1px solid #ddd",
-                borderRadius: "5px",
-                height: "100%",
-                width: "100%",
-              }}
+              padding={15}
+              className="editor"
             />
           </div>
-          <div className="review" onClick={reviewCode}>
-            Review
+
+          <div className="controls">
+            <button className="review-btn" onClick={reviewCode}>
+              🚀 Review Code
+            </button>
           </div>
-        </div>
+        </section>
 
-        <div className="right">
-          {aiResponse && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "10px",
-                gap: "10px",
-              }}
-            >
-              <h3 style={{ margin: 0 }}>💬 Review</h3>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <button
-                  onClick={copyToClipboard}
-                  style={{
-                    padding: "5px 10px",
-                    fontSize: "0.9rem",
-                    backgroundColor: copied ? "green" : "#333",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                >
-                  {copied ? "✅ Copied!" : "📋 Copy Review"}
-                </button>
-
-                <button
-                  onClick={downloadReview}
-                  style={{
-                    padding: "5px 10px",
-                    fontSize: "0.9rem",
-                    backgroundColor: "#007bff",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                >
-                  📥 Download
-                </button>
-              </div>
-            </div>
-          )}
-
+        {/* Right: AI Review Output */}
+        <section className="right-panel">
+          <h2>💬 AI Review</h2>
           {isLoading ? (
-            <p style={{ color: "#aaa", fontStyle: "italic" }}>
-              ⏳ Reviewing Your code...
-            </p>
+            <p className="loading">⏳ Reviewing your code...</p>
+          ) : aiResponse ? (
+            <>
+              <div className="review-actions">
+                <button onClick={copyToClipboard}>
+                  {copied ? "✅ Copied!" : "📋 Copy"}
+                </button>
+                <button onClick={downloadReview}>📥 Download</button>
+              </div>
+              <div className="review-output">
+                <Markdown rehypePlugins={[rehypeHighlight]}>
+                  {aiResponse}
+                </Markdown>
+              </div>
+            </>
           ) : (
-            <Markdown rehypePlugins={[rehypeHighlight]}>{aiResponse}</Markdown>
+            <p className="placeholder">👈 Paste code and click review</p>
           )}
-        </div>
+        </section>
       </main>
-    </>
+
+      {/* 🔹 Footer */}
+      <footer className="footer">
+        <p>Powered by AI | Built with ❤️ by Santu</p>
+      </footer>
+    </div>
   );
 }
 
